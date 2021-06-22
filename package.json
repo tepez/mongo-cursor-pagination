@@ -15,8 +15,8 @@
     "ci:commitlint": "commitlint-jenkins --pr-only",
     "lint": "eslint .",
     "prepublishOnly": "npm run babelBuild && if [ \"$CI\" = '' ]; then node -p 'JSON.parse(process.env.npm_package_config_manualPublishMessage)'; exit 1; fi",
-    "semantic-release": "SEMANTIC_COMMITLINT_SKIP=5ed5489,e2ab709,187f1fe,0dcc73f,6d15fe5 semantic-release",
-    "test": "DRIVER=mongoist jest && DRIVER=native jest"
+    "semantic-release": "npx cross-env SEMANTIC_COMMITLINT_SKIP=5ed5489,e2ab709,187f1fe,0dcc73f,6d15fe5 semantic-release",
+    "test": "npx cross-env DRIVER=mongoist jest && npx cross-env DRIVER=native jest"
   },
   "repository": {
     "type": "git",
@@ -52,6 +52,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "eslint": "^6.8.0",
     "eslint-config-mixmax": "^4.11.2",
