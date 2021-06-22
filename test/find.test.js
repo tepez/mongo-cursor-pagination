@@ -183,7 +183,10 @@ describe('find', () => {
     ]);
   });
 
-  afterAll(() => mongod.stop());
+  afterAll(async () => {
+    await t.db.close();
+    await mongod.stop();
+  });
 
   describe('basic usage', () => {
     describe('when using Mongo ObjectIds', () => {

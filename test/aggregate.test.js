@@ -109,7 +109,10 @@ describe('aggregate', () => {
     ]);
   });
 
-  afterAll(() => mongod.stop());
+  afterAll(async () => {
+    await t.db.close();
+    await mongod.stop();
+  });
 
   describe('test pagination', () => {
     it('queries the first few pages with next/previous', async () => {

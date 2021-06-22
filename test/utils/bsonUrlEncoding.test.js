@@ -11,7 +11,10 @@ describe('bson url encoding', () => {
     t.db = await dbUtils.db(mongod);
   });
 
-  afterAll(() => mongod.stop());
+  afterAll(async () => {
+    await t.db.close();
+    await mongod.stop();
+  });
 
   it('encodes and decodes complex objects', async () => {
     const obj = {

@@ -95,7 +95,10 @@ describe('search', () => {
     ]);
   });
 
-  afterAll(() => mongod.stop());
+  afterAll(async () => {
+    await t.db.close();
+    await mongod.stop();
+  });
 
   describe('basic usage', () => {
     it('queries the first few pages', async () => {

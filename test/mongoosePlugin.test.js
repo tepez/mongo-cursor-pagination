@@ -53,17 +53,20 @@ describe('mongoose plugin', () => {
   });
 
   afterAll(async () => {
+    await mongoose.disconnect();
     await mongod.stop();
   });
 
-  it('initializes the pagination function by the provided name', () => {
+  it('initializes the pagination function by the provided name', async () => {
     const promise = Author.paginateFN();
     expect(promise.then instanceof Function).toBe(true);
+    await promise;
   });
 
-  it('returns a promise', () => {
+  it('returns a promise', async () => {
     const promise = Post.paginate();
     expect(promise.then instanceof Function).toBe(true);
+    await promise;
   });
 
   it('returns data in the expected format', async () => {
@@ -109,14 +112,16 @@ describe('mongoose plugin', () => {
   });
 
   //#region search
-  it('initializes the search function by the provided name', () => {
+  it('initializes the search function by the provided name', async () => {
     const promise = Author.searchFN('');
     expect(promise.then instanceof Function).toBe(true);
+    await promise;
   });
 
-  it('returns a promise for search function', () => {
+  it('returns a promise for search function', async () => {
     const promise = Post.search('');
     expect(promise.then instanceof Function).toBe(true);
+    await promise;
   });
 
   it('returns data in the expected format for search function', async () => {

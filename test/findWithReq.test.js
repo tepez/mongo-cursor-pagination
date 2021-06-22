@@ -52,7 +52,10 @@ describe('findWithReq', () => {
       }),
     ]);
   });
-  afterAll(() => mongod.stop());
+  afterAll(async () => {
+    await t.db.close();
+    await mongod.stop();
+  });
 
   describe('basic usage', () => {
     it('queries first few pages', async () => {
