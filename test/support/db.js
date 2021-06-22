@@ -9,7 +9,7 @@ function start() {
 }
 
 async function db(mongod, driver = null) {
-  const uri = await mongod.getConnectionString();
+  const uri = await mongod.getUri();
   if (driver === 'mongoist') {
     return mongoist(uri);
   }

@@ -4,34 +4,65 @@ const _ = require('underscore');
 const mongooseCursorPaginate = require('../src/mongoose.plugin');
 const dbUtils = require('./support/db');
 
-const AuthorSchema = new mongoose.Schema({ name: String });
-AuthorSchema.index({ name: 'text' });
+const AuthorSchema = new mongoose.Schema(
+  {
+    name: String,
+  },
+  {
+    autoIndex: false,
+  }
+);
+AuthorSchema.index(
+  {
+    name: 'text',
+  },
+  {
+    background: false,
+  }
+);
 
 AuthorSchema.plugin(mongooseCursorPaginate, { name: 'paginateFN', searchFnName: 'searchFN' });
 
-const Author = mongoose.model('Author', AuthorSchema);
-
-const PostSchema = new mongoose.Schema({
-  title: String,
-  date: Date,
-  body: String,
-  author: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Author',
+const PostSchema = new mongoose.Schema(
+  {
+    title: String,
+    date: Date,
+    body: String,
+    author: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Author',
+    },
   },
-});
+  { autoIndex: false }
+);
 
 PostSchema.plugin(mongooseCursorPaginate);
-PostSchema.index({ title: 'text' });
+PostSchema.index(
+  {
+    title: 'text',
+  },
+  {
+    background: false,
+  }
+);
 
-const Post = mongoose.model('Post', PostSchema);
-
-let mongod;
 describe('mongoose plugin', () => {
+  let mongod;
+  let connection;
+  let Author;
+  let Post;
+
   beforeAll(async () => {
     mongod = await dbUtils.start();
-    await mongoose.connect(await mongod.getConnectionString());
-    await mongoose.connection.db.dropDatabase();
+    connection = await mongoose.createConnection(await mongod.getUri(), {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    await connection.db.dropDatabase();
+
+    Author = connection.model('Author', AuthorSchema);
+    Post = connection.model('Post', PostSchema);
+
     const author = await Author.create({ name: 'Pawan Pandey' });
 
     const posts = [],
@@ -48,11 +79,12 @@ describe('mongoose plugin', () => {
     }
 
     await Post.create(posts);
-    await Author.ensureIndexes();
-    await Post.ensureIndexes();
+    await Author.createIndexes();
+    await Post.createIndexes();
   });
 
   afterAll(async () => {
+    await connection.close();
     await mongoose.disconnect();
     await mongod.stop();
   });

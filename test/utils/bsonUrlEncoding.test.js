@@ -3,12 +3,14 @@ const mongo = require('mongoist');
 const bsonUrlEncoding = require('../../src/utils/bsonUrlEncoding');
 const dbUtils = require('../support/db');
 
+const driver = process.env.DRIVER;
+
 describe('bson url encoding', () => {
   let mongod;
   const t = {};
   beforeAll(async () => {
     mongod = dbUtils.start();
-    t.db = await dbUtils.db(mongod);
+    t.db = await dbUtils.db(mongod, driver);
   });
 
   afterAll(async () => {
