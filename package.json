@@ -12,7 +12,9 @@
     "babelBuild": "babel src -d dist/node",
     "babelWatch": "babel --watch src -d dist/node",
     "lint": "eslint .",
-    "test": "npx cross-env DRIVER=mongoist jest && npx cross-env DRIVER=native jest",
+    "test-native": "npx cross-env DRIVER=native jest",
+    "test-mongoist": "npx cross-env DRIVER=mongoist jest",
+    "test": "npm run test-native",
     "update": "npm run babelBuild && npx np --no-publish --branch tepez"
   },
   "repository": {
