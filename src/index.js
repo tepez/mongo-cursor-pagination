@@ -1,10 +1,10 @@
-const config = require('./config');
 const aggregate = require('./aggregate');
+const config = require('./config');
 const find = require('./find');
 const findWithReq = require('./findWithReq');
+const mongoosePlugin = require('./mongoose.plugin');
 const search = require('./search');
 const sanitizeQuery = require('./utils/sanitizeQuery');
-const mongoosePlugin = require('./mongoose.plugin');
 
 module.exports = {
   config,

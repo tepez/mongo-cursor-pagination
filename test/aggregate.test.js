@@ -1,6 +1,7 @@
+const _ = require('underscore');
+
 const paging = require('../');
 const dbUtils = require('./support/db');
-const _ = require('underscore');
 
 const driver = process.env.DRIVER;
 

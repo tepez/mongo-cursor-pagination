@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const _ = require('underscore');
+
 const mongooseCursorPaginate = require('../src/mongoose.plugin');
 const dbUtils = require('./support/db');
 

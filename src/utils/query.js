@@ -1,5 +1,6 @@
-const bsonUrlEncoding = require('./bsonUrlEncoding');
 const dopProp = require('dot-prop');
+
+const bsonUrlEncoding = require('./bsonUrlEncoding');
 
 module.exports = {
   /**
