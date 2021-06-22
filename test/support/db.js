@@ -1,4 +1,4 @@
-const { MongoMemoryServer } = require('mongodb-memory-server');
+const { MongoMemoryServer } = require('mongodb-memory-server-core');
 const mongoist = require('mongoist');
 const MongoClient = require('mongodb');
 
