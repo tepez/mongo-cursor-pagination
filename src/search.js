@@ -93,7 +93,9 @@ module.exports = async function(collection, searchString, params) {
   // https://www.npmjs.com/package/mongoist#cursor-operations
   const aggregateMethod = collection.aggregateAsCursor ? 'aggregateAsCursor' : 'aggregate';
 
-  const results = await collection[aggregateMethod](aggregate).toArray();
+  const aggregateQuery = collection[aggregateMethod](aggregate);
+  const execMethod = aggregateQuery.toArray ? 'toArray' : 'exec';
+  const results = await aggregateQuery[execMethod]();
 
   const fullPageOfResults = results.length === params.limit;
   if (fullPageOfResults) {

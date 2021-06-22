@@ -53,7 +53,8 @@ module.exports = async function(collection, params) {
   // Query one more element to see if there's another page.
   const cursor = collatedQuery.sort($sort).limit(params.limit + 1);
   if (params.hint) cursor.hint(params.hint);
-  const results = await cursor.toArray();
+  const execMethod = cursor.toArray ? 'toArray' : 'exec';
+  const results = await cursor[execMethod]();
 
   const response = prepareResponse(results, params);
 

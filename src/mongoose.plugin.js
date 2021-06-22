@@ -22,7 +22,7 @@ module.exports = function(schema, options) {
 
     params = _.extend({}, params);
 
-    return find(this.collection, params);
+    return find(this, params);
   };
 
   /**
@@ -37,7 +37,7 @@ module.exports = function(schema, options) {
 
     params = _.extend({}, params);
 
-    return search(this.collection, searchString, params);
+    return search(this, searchString, params);
   };
 
   if (options && options.name) {
