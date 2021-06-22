@@ -1,5 +1,5 @@
 {
-  "name": "mongo-cursor-pagination",
+  "name": "@tepez/mongo-cursor-pagination",
   "version": "7.4.0",
   "description": "Make it easy to return cursor-paginated results from a Mongo collection",
   "main": "index.js",
@@ -11,16 +11,13 @@
   "scripts": {
     "babelBuild": "babel src -d dist/node",
     "babelWatch": "babel --watch src -d dist/node",
-    "ci": "npm run lint && npm run test",
-    "ci:commitlint": "commitlint-jenkins --pr-only",
     "lint": "eslint .",
-    "prepublishOnly": "npm run babelBuild && if [ \"$CI\" = '' ]; then node -p 'JSON.parse(process.env.npm_package_config_manualPublishMessage)'; exit 1; fi",
-    "semantic-release": "npx cross-env SEMANTIC_COMMITLINT_SKIP=5ed5489,e2ab709,187f1fe,0dcc73f,6d15fe5 semantic-release",
-    "test": "npx cross-env DRIVER=mongoist jest && npx cross-env DRIVER=native jest"
+    "test": "npx cross-env DRIVER=mongoist jest && npx cross-env DRIVER=native jest",
+    "update": "npm run babelBuild && npx np --no-publish --branch tepez"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mixmaxhq/mongo-cursor-pagination.git"
+    "url": "git+https://github.com/tepez/mongo-cursor-pagination.git"
   },
   "keywords": [
     "mongo",
@@ -34,9 +31,9 @@
   "author": "Brad Vogel <brad@mixmax.com> (https://mixmax.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mixmaxhq/mongo-cursor-pagination/issues"
+    "url": "https://github.com/tepez/mongo-cursor-pagination/issues"
   },
-  "homepage": "https://github.com/mixmaxhq/mongo-cursor-pagination#readme",
+  "homepage": "https://github.com/tepez/mongo-cursor-pagination#readme",
   "dependencies": {
     "base64-url": "^2.2.0",
     "bson": "^4.1.0",
@@ -46,14 +43,11 @@
     "underscore": "^1.9.2"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^8.3.4",
-    "@mixmaxhq/commitlint-jenkins": "^1.4.4",
     "@mixmaxhq/prettier-config": "^1.0.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "cross-env": "^7.0.3",
-    "cz-conventional-changelog": "^3.2.0",
     "eslint": "^6.8.0",
     "eslint-config-mixmax": "^4.11.2",
     "jest": "^26.0.1",
@@ -62,25 +56,14 @@
     "mongodb-memory-server-core": "^5.2.11",
     "mongoist": "2.3.0",
     "mongoose": "5.11.10",
-    "prettier": "^1.19.1",
-    "semantic-release": "^17.2.3"
+    "np": "^7.5.0",
+    "prettier": "^1.19.1"
   },
   "engines": {
     "node": ">= 6.9.1"
   },
   "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    },
-    "manualPublishMessage": "This repository is configured to use semantic-release for its releases. Please do not release manually.\n"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "release": {
-    "extends": "@mixmaxhq/semantic-release-config"
+    "manualPublishMessage": "This repository is configured to use np for its releases. Please do not release manually.\n"
   },
   "publishConfig": {
     "access": "public"
