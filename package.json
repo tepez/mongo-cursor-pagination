@@ -6,7 +6,8 @@
   "files": [
     "index.js",
     "dist",
-    "src"
+    "src",
+    "index.d.ts"
   ],
   "scripts": {
     "babelBuild": "babel src -d dist/node",
