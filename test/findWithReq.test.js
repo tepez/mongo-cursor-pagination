@@ -9,7 +9,7 @@ describe('findWithReq', () => {
   let mongod;
   const t = {};
   beforeAll(async () => {
-    mongod = dbUtils.start();
+    mongod = await dbUtils.start();
     t.db = await dbUtils.db(mongod, driver);
 
     await Promise.all([

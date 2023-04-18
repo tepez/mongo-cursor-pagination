@@ -6,7 +6,7 @@ module.exports = async () => {
   console.log(
     'Letting mongodb-memory-server-core download the mongodb binaries, this can take a short while on first runs'
   );
-  const mongod = dbUtils.start();
+  const mongod = await dbUtils.start();
   const mongo = await dbUtils.db(mongod);
   await mongo.close();
   await mongod.stop();

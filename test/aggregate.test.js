@@ -10,7 +10,7 @@ let mongod;
 describe('aggregate', () => {
   const t = {};
   beforeAll(async () => {
-    mongod = dbUtils.start();
+    mongod = await dbUtils.start();
     t.db = await dbUtils.db(mongod, driver);
 
     // Set up collections once for testing later.
