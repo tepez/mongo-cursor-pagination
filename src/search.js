@@ -9,8 +9,7 @@ const bsonUrlEncoding = require('./utils/bsonUrlEncoding');
  * a paginatedField parameter. Note that this is less performant than find() because it must
  * perform the full search on each call to this function.
  *
- * @param {MongoCollection} collection A collection object returned from the MongoDB library's
- *    or the mongoist package's `db.collection(<collectionName>)` method. This MUST have a Mongo
+ * @param {MongoCollection} collection A collection object returned from the MongoDB library's. This MUST have a Mongo
  *    $text index on it.
  *    See https://docs.mongodb.com/manual/core/index-text/.
  * @param {String} searchString String to search on.
@@ -22,7 +21,7 @@ const bsonUrlEncoding = require('./utils/bsonUrlEncoding');
  *    -next {String} The value to start querying the page. Defaults to start at the beginning of
  *      the results.
  */
-module.exports = async function(collection, searchString, params) {
+module.exports = async function (collection, searchString, params) {
   if (_.isString(params.limit)) params.limit = parseInt(params.limit, 10);
   if (params.next) params.next = bsonUrlEncoding.decode(params.next);
 
@@ -90,11 +89,7 @@ module.exports = async function(collection, searchString, params) {
 
   let response;
 
-  // Support both the native 'mongodb' driver and 'mongoist'. See:
-  // https://www.npmjs.com/package/mongoist#cursor-operations
-  const aggregateMethod = collection.aggregateAsCursor ? 'aggregateAsCursor' : 'aggregate';
-
-  const aggregateQuery = collection[aggregateMethod](aggregate);
+  const aggregateQuery = collection.aggregate(aggregate);
   const execMethod = aggregateQuery.toArray ? 'toArray' : 'exec';
   const results = await aggregateQuery[execMethod]();
 

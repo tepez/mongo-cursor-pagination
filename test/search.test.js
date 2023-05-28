@@ -1,5 +1,5 @@
-const paging = require('../');
 const dbUtils = require('./support/db');
+const paging = require('../');
 
 const driver = process.env.DRIVER;
 
@@ -11,7 +11,7 @@ describe('search', () => {
     t.db = await dbUtils.db(mongod, driver);
 
     await Promise.all([
-      t.db.collection('test_paging_search').ensureIndex(
+      t.db.db.collection('test_paging_search').createIndex(
         {
           mytext: 'text',
         },
@@ -19,7 +19,7 @@ describe('search', () => {
           name: 'test_index',
         }
       ),
-      t.db.collection('test_duplicate_search').ensureIndex(
+      t.db.db.collection('test_duplicate_search').createIndex(
         {
           mytext: 'text',
         },
@@ -30,7 +30,7 @@ describe('search', () => {
     ]);
 
     await Promise.all([
-      t.db.collection('test_paging_search').insert([
+      t.db.db.collection('test_paging_search').insertMany([
         {
           mytext: 'one',
         },
@@ -60,7 +60,7 @@ describe('search', () => {
           group: 'one',
         },
       ]),
-      t.db.collection('test_duplicate_search').insert([
+      t.db.db.collection('test_duplicate_search').insertMany([
         {
           _id: 6,
           mytext: 'one',
@@ -96,13 +96,13 @@ describe('search', () => {
   });
 
   afterAll(async () => {
-    await t.db.close();
+    await t.db.client.close();
     await mongod.stop();
   });
 
   describe('basic usage', () => {
     it('queries the first few pages', async () => {
-      const collection = t.db.collection('test_paging_search');
+      const collection = t.db.db.collection('test_paging_search');
       // First page of 2
       let res = await paging.search(collection, 'one', {
         fields: {
@@ -159,7 +159,7 @@ describe('search', () => {
 
   describe('when there are duplicate scores', () => {
     it('queries the first few pages', async () => {
-      const collection = t.db.collection('test_duplicate_search');
+      const collection = t.db.db.collection('test_duplicate_search');
       // First page of 2.
       let res = await paging.search(collection, 'one', {
         fields: {

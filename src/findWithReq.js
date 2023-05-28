@@ -15,7 +15,6 @@ const sanitizeQuery = require('./utils/sanitizeQuery');
  *      can be specified as a comma-delimited list. If field name used is not in params.fields,
  *      it will be ignored.
  * @param {MongoCollection} collection A collection object returned from the MongoDB library's
- *    or the mongoist package's `db.collection(<collectionName>)` method.
  * @param {Object} params See documentation for `find()`, plus these options:
  *    -overrideFields: an object containing fields that should override fields from the querystring, e.g.
  *      {_id: 0} or {internalField: 1}. We only support field exclusion for _id, as we expect whitelists

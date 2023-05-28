@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const _ = require('underscore');
 
-const mongooseCursorPaginate = require('../src/mongoose.plugin');
 const dbUtils = require('./support/db');
+const mongooseCursorPaginate = require('../src/mongoose.plugin');
 
 const AuthorSchema = new mongoose.Schema(
   {
@@ -54,10 +54,12 @@ describe('mongoose plugin', () => {
 
   beforeAll(async () => {
     mongod = await dbUtils.start();
-    connection = await mongoose.createConnection(await mongod.getUri(), {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    connection = await mongoose
+      .createConnection(mongod.getUri(), {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
+      .asPromise();
     await connection.db.dropDatabase();
 
     Author = connection.model('Author', AuthorSchema);

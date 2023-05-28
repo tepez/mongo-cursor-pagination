@@ -8,8 +8,7 @@ const sanitizeParams = require('./utils/sanitizeParams');
  * Performs a find() query on a passed-in Mongo collection, using criteria you specify. The results
  * are ordered by the paginatedField.
  *
- * @param {MongoCollection} collection A collection object returned from the MongoDB library's
- *    or the mongoist package's `db.collection(<collectionName>)` method.
+ * @param {MongoCollection} collection A collection object returned from the MongoDB library's.
  * @param {Object} params
  *    -query {Object} The find query.
  *    -limit {Number} The page size. Must be between 1 and `config.MAX_LIMIT`.
@@ -28,18 +27,17 @@ const sanitizeParams = require('./utils/sanitizeParams');
  *    -before {String} The _id to start querying previous page.
  *    -hint {String} An optional index hint to provide to the mongo query
  */
-module.exports = async function(collection, params) {
+module.exports = async function (collection, params) {
   const removePaginatedFieldInResponse = params.fields && !params.fields[params.paginatedField];
 
   params = _.defaults(await sanitizeParams(collection, params), { query: {} });
   const cursorQuery = generateCursorQuery(params);
   const $sort = generateSort(params);
 
-  // Support both the native 'mongodb' driver and 'mongoist'. See:
-  // https://www.npmjs.com/package/mongoist#cursor-operations
-  const findMethod = collection.findAsCursor ? 'findAsCursor' : 'find';
+  const findOptions = {};
+  if (params.fields) findOptions.projection = params.fields;
 
-  const query = collection[findMethod]({ $and: [cursorQuery, params.query] }, params.fields);
+  const query = collection.find({ $and: [cursorQuery, params.query] }, findOptions);
 
   /**
    * IMPORTANT

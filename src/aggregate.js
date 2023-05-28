@@ -18,8 +18,7 @@ const sanitizeParams = require('./utils/sanitizeParams');
  * Additionally, an additional query will be appended to the first `$match` found in order to apply the offset
  * required for the cursor.
  *
- * @param {MongoCollection} collection A collection object returned from the MongoDB library's
- *    or the mongoist package's `db.collection(<collectionName>)` method.
+ * @param {MongoCollection} collection A collection object returned from the MongoDB library's.
  * @param {Object} params
  *    -aggregation {Object[]} The aggregation query.
  *    -limit {Number} The page size. Must be between 1 and `config.MAX_LIMIT`.
@@ -69,11 +68,7 @@ module.exports = async function aggregate(collection, params) {
    */
   const options = config.COLLATION ? { collation: config.COLLATION } : undefined;
 
-  // Support both the native 'mongodb' driver and 'mongoist'. See:
-  // https://www.npmjs.com/package/mongoist#cursor-operations
-  const aggregateMethod = collection.aggregateAsCursor ? 'aggregateAsCursor' : 'aggregate';
-
-  const results = await collection[aggregateMethod](params.aggregation, options).toArray();
+  const results = await collection.aggregate(params.aggregation, options).toArray();
 
   return prepareResponse(results, params);
 };

@@ -1,7 +1,7 @@
 const _ = require('underscore');
 
-const paging = require('../');
 const dbUtils = require('./support/db');
+const paging = require('../');
 
 const driver = process.env.DRIVER;
 
@@ -13,7 +13,7 @@ describe('findWithReq', () => {
     t.db = await dbUtils.db(mongod, driver);
 
     await Promise.all([
-      t.db.collection('test_paging').insert([
+      t.db.db.collection('test_paging').insertMany([
         {
           counter: 1,
           myfield1: 'a',
@@ -35,7 +35,7 @@ describe('findWithReq', () => {
           myfield2: 'b',
         },
       ]),
-      t.db.collection('test_paging_fields').insert({
+      t.db.db.collection('test_paging_fields').insertOne({
         obj: {
           one: 1,
           two: {
@@ -53,13 +53,13 @@ describe('findWithReq', () => {
     ]);
   });
   afterAll(async () => {
-    await t.db.close();
+    await t.db.client.close();
     await mongod.stop();
   });
 
   describe('basic usage', () => {
     it('queries first few pages', async () => {
-      const collection = t.db.collection('test_paging');
+      const collection = t.db.db.collection('test_paging');
       const fields = {
         counter: 1,
         myfield1: 1,
@@ -139,7 +139,7 @@ describe('findWithReq', () => {
     });
 
     it('does not query more fields than allowed', async () => {
-      const collection = t.db.collection('test_paging');
+      const collection = t.db.db.collection('test_paging');
       const res = await paging.findWithReq(
         {
           query: {
@@ -163,7 +163,7 @@ describe('findWithReq', () => {
     });
 
     it('allows a request to specify fields if not otherwise specified', async () => {
-      const collection = t.db.collection('test_paging');
+      const collection = t.db.db.collection('test_paging');
       const res = await paging.findWithReq(
         {
           query: {
@@ -183,7 +183,7 @@ describe('findWithReq', () => {
     });
 
     it('does not allow a limit to be specified that is higher than params.limit', async () => {
-      const collection = t.db.collection('test_paging');
+      const collection = t.db.db.collection('test_paging');
       const res = await paging.findWithReq(
         {
           query: {
@@ -200,7 +200,7 @@ describe('findWithReq', () => {
     });
 
     it('handles empty values', async () => {
-      const collection = t.db.collection('test_paging');
+      const collection = t.db.db.collection('test_paging');
       const res = await paging.findWithReq(
         {
           query: {
@@ -224,7 +224,7 @@ describe('findWithReq', () => {
     });
 
     it('handles bad value for limit', async () => {
-      const collection = t.db.collection('test_paging');
+      const collection = t.db.db.collection('test_paging');
       const res = await paging.findWithReq(
         {
           query: {
@@ -248,7 +248,7 @@ describe('findWithReq', () => {
 
   describe('fields', () => {
     it('picks fields', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
@@ -277,7 +277,7 @@ describe('findWithReq', () => {
     });
 
     it('works without fields', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
@@ -301,7 +301,7 @@ describe('findWithReq', () => {
     });
 
     it('picks fields when nested', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
@@ -329,7 +329,7 @@ describe('findWithReq', () => {
     });
 
     it('disallows properties that are not defined', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
@@ -356,7 +356,7 @@ describe('findWithReq', () => {
     });
 
     it('picks exact fields', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
@@ -388,7 +388,7 @@ describe('findWithReq', () => {
     });
 
     it('picks exact subfields', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
@@ -417,7 +417,7 @@ describe('findWithReq', () => {
     });
 
     it('does not allow a broader scoping of fields', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
@@ -440,7 +440,7 @@ describe('findWithReq', () => {
     });
 
     it('does not allow a broader scoping of subfields', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
@@ -473,7 +473,7 @@ describe('findWithReq', () => {
     });
 
     it('picks exact subfields', async () => {
-      const collection = t.db.collection('test_paging_fields');
+      const collection = t.db.db.collection('test_paging_fields');
       const res = await paging.findWithReq(
         {
           query: {
