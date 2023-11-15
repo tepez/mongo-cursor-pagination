@@ -39,7 +39,7 @@ declare module '@tepez/mongo-cursor-pagination' {
     name?: string;
   }
 
-  export interface IPaginateOptions<T extends Document<T>> {
+  export interface IPaginateOptions<T extends Document> {
     /**
      * The find query
      */
